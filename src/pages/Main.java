@@ -47,6 +47,7 @@ public class Main extends javax.swing.JFrame {
         jMenu1.setText("jMenu1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMaximumSize(new java.awt.Dimension(800, 500));
         setResizable(false);
 
         panelGradiente2.setColorPrimario(new java.awt.Color(163, 223, 158));
@@ -61,9 +62,9 @@ public class Main extends javax.swing.JFrame {
         jLabel2.setBounds(0, 70, 820, 43);
 
         LogInBtn.setBackground(new java.awt.Color(0, 34, 102));
-        LogInBtn.setFont(new java.awt.Font("Verdana", 0, 18)); // NOI18N
+        LogInBtn.setFont(new java.awt.Font("Rockwell Extra Bold", 0, 18)); // NOI18N
         LogInBtn.setForeground(new java.awt.Color(204, 255, 255));
-        LogInBtn.setText("<html>\n<body  style='text-align:center;'>\nAlready have an account?\n<br>\nLog In\n</body>\n</html>");
+        LogInBtn.setText("<html> <body  style='text-align:center;'> Already have an account?</body> </html>");
         LogInBtn.setToolTipText("");
         LogInBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         LogInBtn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -76,9 +77,9 @@ public class Main extends javax.swing.JFrame {
         LogInBtn.setBounds(50, 220, 310, 130);
 
         BrowseAptBtn.setBackground(new java.awt.Color(0, 84, 42));
-        BrowseAptBtn.setFont(new java.awt.Font("Verdana", 0, 18)); // NOI18N
+        BrowseAptBtn.setFont(new java.awt.Font("Rockwell Extra Bold", 0, 18)); // NOI18N
         BrowseAptBtn.setForeground(new java.awt.Color(204, 255, 204));
-        BrowseAptBtn.setText("<html>\n<body  style='text-align:center;'>\nNew here?\n<br>\nBrowse Apartments\n</body>\n</html>");
+        BrowseAptBtn.setText("<html> <body  style='text-align:center;'> New here?</body> </html>");
         BrowseAptBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         BrowseAptBtn.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         BrowseAptBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -100,16 +101,14 @@ public class Main extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(panelGradiente2, javax.swing.GroupLayout.PREFERRED_SIZE, 812, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(panelGradiente2, javax.swing.GroupLayout.PREFERRED_SIZE, 800, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(panelGradiente2, javax.swing.GroupLayout.PREFERRED_SIZE, 512, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(panelGradiente2, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();

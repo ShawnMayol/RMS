@@ -1,11 +1,21 @@
 package pages;
 
-import java.awt.Toolkit;
+import utils.db_connect;
+import utils.PasswordEncryption;
+import java.sql.*;
+import javax.swing.JOptionPane;
 
 public class Login extends javax.swing.JFrame {
+    Connection conn;
+    
     public Login() {
         initComponents();
         setLocationRelativeTo(null);
+        conn = db_connect.connect();
+
+        if (conn == null) {
+            JOptionPane.showMessageDialog(this, "Failed to connect to the database.");
+        }
     }
 
     /**
@@ -24,8 +34,8 @@ public class Login extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         login = new javax.swing.JButton();
         browseBtn = new javax.swing.JButton();
-        myPassword1 = new swing.MyPassword();
-        myTextField1 = new swing.MyTextField();
+        passwordField = new swing.MyPassword();
+        usernameField = new swing.MyTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(0, 204, 153));
@@ -44,7 +54,7 @@ public class Login extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel2.setText("Email");
+        jLabel2.setText("Username");
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
@@ -55,10 +65,15 @@ public class Login extends javax.swing.JFrame {
         login.setForeground(new java.awt.Color(255, 255, 255));
         login.setText("Log In");
         login.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        login.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loginActionPerformed(evt);
+            }
+        });
 
         browseBtn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         browseBtn.setForeground(new java.awt.Color(2, 74, 114));
-        browseBtn.setText("Dont have an account?");
+        browseBtn.setText("Don't have an account?");
         browseBtn.setAlignmentY(0.0F);
         browseBtn.setContentAreaFilled(false);
         browseBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -71,17 +86,17 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
-        myPassword1.setBackground(new java.awt.Color(255, 255, 255));
+        passwordField.setBackground(new java.awt.Color(255, 255, 255));
 
-        myTextField1.setBackground(new java.awt.Color(255, 255, 255));
+        usernameField.setBackground(new java.awt.Color(255, 255, 255));
 
         panelBorder1.setLayer(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
         panelBorder1.setLayer(jLabel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
         panelBorder1.setLayer(jLabel3, javax.swing.JLayeredPane.DEFAULT_LAYER);
         panelBorder1.setLayer(login, javax.swing.JLayeredPane.DEFAULT_LAYER);
         panelBorder1.setLayer(browseBtn, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        panelBorder1.setLayer(myPassword1, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        panelBorder1.setLayer(myTextField1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        panelBorder1.setLayer(passwordField, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        panelBorder1.setLayer(usernameField, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout panelBorder1Layout = new javax.swing.GroupLayout(panelBorder1);
         panelBorder1.setLayout(panelBorder1Layout);
@@ -94,8 +109,8 @@ public class Login extends javax.swing.JFrame {
                     .addComponent(browseBtn)
                     .addComponent(jLabel3)
                     .addComponent(jLabel2)
-                    .addComponent(myPassword1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(myTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(passwordField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(usernameField, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(login, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE))
                 .addContainerGap(49, Short.MAX_VALUE))
         );
@@ -107,11 +122,11 @@ public class Login extends javax.swing.JFrame {
                 .addGap(31, 31, 31)
                 .addComponent(jLabel2)
                 .addGap(0, 0, 0)
-                .addComponent(myTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(usernameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(20, 20, 20)
                 .addComponent(jLabel3)
                 .addGap(0, 0, 0)
-                .addComponent(myPassword1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(passwordField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
                 .addComponent(browseBtn)
                 .addGap(18, 18, 18)
@@ -150,6 +165,70 @@ public class Login extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_browseBtnActionPerformed
 
+    private void loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginActionPerformed
+        String username = usernameField.getText();  // Get the username from the text field
+        String password = new String(passwordField.getPassword());  // Get the password from the password field
+
+        if (username.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter both username and password.");
+            return;
+        }
+
+        // Validate login credentials
+        if (validateLogin(username, password)) {
+            // Redirect based on user role
+            String role = getUserRole(username);
+            if ("admin".equals(role)) {
+                AdminDashboard adminDashboard = new AdminDashboard();
+                adminDashboard.setVisible(true);
+                this.dispose(); // Close the login page
+            } else if ("user".equals(role)) {
+                UserDashboard userDashboard = new UserDashboard();
+                userDashboard.setVisible(true);
+                this.dispose(); // Close the login page
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Invalid username or password.");
+        }
+    }//GEN-LAST:event_loginActionPerformed
+
+    // Validate the entered username and password
+    private boolean validateLogin(String username, String password) {
+        String query = "SELECT username, password FROM users WHERE username = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                String storedHashedPassword = rs.getString("password");
+
+                // Verify password
+                if (PasswordEncryption.verifyPassword(password, storedHashedPassword)) {
+                    return true;  // Password matches
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return false;  // Invalid login
+    }
+
+    // Get the user role (admin/user) based on the username
+    private String getUserRole(String username) {
+        String query = "SELECT role FROM users WHERE username = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getString("role");  // Return the role (admin/user)
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return "user";  // Default to "user" if not found
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -191,9 +270,9 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JButton login;
-    private swing.MyPassword myPassword1;
-    private swing.MyTextField myTextField1;
     private swing.PanelBorder panelBorder1;
     private swing.PanelGradiente panelGradiente2;
+    private swing.MyPassword passwordField;
+    private swing.MyTextField usernameField;
     // End of variables declaration//GEN-END:variables
 }

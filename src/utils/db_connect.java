@@ -5,13 +5,13 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class db_connect {
-    private static final String URL = "jdbc:mysql://localhost:3306/your_database_name";
+    private static final String URL = "jdbc:mysql://localhost:3306/rms";
     private static final String USER = "root";
     private static final String PASSWORD = "";
-    
-    private Connection connection;
 
-    public db_connect() {
+    // Static method to get the connection
+    public static Connection connect() {
+        Connection connection = null;
         try {
             // Load MySQL JDBC driver
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -21,20 +21,6 @@ public class db_connect {
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    public Connection getConnection() {
         return connection;
-    }
-
-    public void closeConnection() {
-        try {
-            if (connection != null && !connection.isClosed()) {
-                connection.close();
-                System.out.println("Database connection closed.");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 }
